@@ -13,8 +13,9 @@
 
     function __construct($TimeOn, $TimeOff)
     {
-      $compensatedTimeOff = date('H:i', strtotime($TimeOff) - 60 * 60 * 3.5);
-      $compensatedTimeOn =  date('H:i', strtotime($TimeOn) - 60 * 60 * 4.5);
+      //$compensatedTimeOff = date('m-d-Y H:i', strtotime($TimeOff) - (60 * 60 * 3.5));
+      $compensatedTimeOff = date('m-d-Y H:i', strtotime('today midnight') + (60 * 60));
+      $compensatedTimeOn =  date('m-d-Y H:i', strtotime($TimeOn) - (60 * 60 * 4.5));
       $this->CurrentDay = date("m-d-Y");
       $this->TimeOn = $compensatedTimeOn;
       $this->TimeOff = $compensatedTimeOff;
