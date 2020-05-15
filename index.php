@@ -3,31 +3,25 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+date_default_timezone_set("America/New_York");
 
-include 'LightStatus.php';
-$lat = "41.626688";
-$long = "-81.452380";
-if (isset($_GET["GetCurrentSunriseAndSunset"]))//Controls pin 17
+include 'Reporter.php';
+
+if (!empty($_POST["pwd"]))
 {
-  if ($_GET["GetCurrentSunriseAndSunset"] = 1)//If it's a 1, update the existing item
+  $currentStoredConfig = fgets(fopen('config.txt', 'r'));
+  $currentStoredConfig = trim($currentStoredConfig);
+  if ($_POST["pwd"] == $currentStoredConfig)
   {
-    $apiResponse = file_get_contents("https://api.sunrise-sunset.org/json?lat=".$lat."&lng=".$long."&date=today");
-    $formattedResponse = json_decode($apiResponse);
-    $formattedResponseResults = $formattedResponse->results;
-    $newTimeObject = new LightStatus($formattedResponseResults->sunset, $formattedResponseResults->sunrise);
-    $newTimeObject->saveSelfToTextFile();
-    $newTimeObject->appendToLightsLog();
-    echo json_encode($newTimeObject);
+    include 'main.php';
   }
-  else if ($_GET["GetCurrentSunriseAndSunset"] = 2)
-  {
-    $existingTimeObject = new LightStatus();
-    echo $existingTimeObject->loadSelfFromTextFile();
+  else {
+    echo "ERROR! Incorrect Password Submitted! This event will be logged";
+    log::authorizationError();
   }
 }
-else
-{
-
+else {
+  echo "ERROR! No password passed! This event will be logged";
+  log::authorizationError();
 }
-
 ?>

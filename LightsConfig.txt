@@ -1,1 +1,1 @@
-{"TimeOn":"8:15 pm","TimeOff":"6:29 am","CurrentDay":"05-22-2019"}
+{"TimeOn":"2020-05-15 06:41:15pm","TimeOff":"2020-05-15 09:41:15pm"}

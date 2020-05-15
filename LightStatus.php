@@ -6,42 +6,42 @@
   {
     public $TimeOn;
     public $TimeOff;
-    public $CurrentDay;
 
-    private $SaveFile = "LightsConfig.txt";
-    private $LightLogFile = "LightsConfigLog.txt";
+    public static $SaveFile = "LightsConfig.txt";
+
+    public static function update($status)
+    {
+      $passedObject = json_decode($status);
+      $newStatus = new LightStatus($passedObject->TimeOn, $passedObject->TimeOff);
+      LightStatus::saveToTextFile($newStatus);
+    }
 
     function __construct($TimeOn, $TimeOff)
     {
-      //$compensatedTimeOff = date('m-d-Y H:i', strtotime($TimeOff) - (60 * 60 * 3.5));
-      $compensatedTimeOff = date('m-d-Y H:i', strtotime('today midnight') + (60 * 60));
-      $compensatedTimeOn =  date('m-d-Y H:i', strtotime($TimeOn) - (60 * 60 * 4.5));
-      $this->CurrentDay = date("m-d-Y");
-      $this->TimeOn = $compensatedTimeOn;
-      $this->TimeOff = $compensatedTimeOff;
+      $this->TimeOn = $TimeOn;
+      $this->TimeOff = $TimeOff;
       return $this;
     }
 
-    public function appendToLightsLog()
+    public static function printAndSaveBSLightStatus()
     {
-      $myOpenFile = fopen($this->LightLogFile, "a") or die("Unable to open save file!");
-      fwrite($myOpenFile, json_encode($this));
-      fwrite($myOpenFile, PHP_EOL);
-      fclose($myOpenFile);
-    }
-    //Returns a json object
-    public function loadSelfFromTextFile()
-    {
-      $myOpenFile = fopen($this->SaveFile, "r") or die("Unable to open save file!");
-      $jsonObject = fread($myOpenFile, filesize($SaveFile));
-      fclose($myOpenFile);
-      return $jsonObject;
+      $newStatus = new LightStatus(date("Y-m-d h:i:sa"), date("Y-m-d h:i:sa"));
+      LightStatus::saveToTextFile($newStatus);
+      echo json_encode($newStatus);
     }
 
-    public function saveSelfToTextFile()
+    public static function loadFromTextFile()
     {
-      $myOpenFile = fopen($this->SaveFile, "w") or die("Unable to open save file!");
-      fwrite($myOpenFile, json_encode($this));
+      $myOpenFile = fopen(LightStatus::$SaveFile, "r") or die("Unable to open save file!");
+      $timeConfiguration = fread($myOpenFile, filesize(LightStatus::$SaveFile));
+      fclose($myOpenFile);
+      return $timeConfiguration;
+    }
+
+    public static function saveToTextFile($config)
+    {
+      $myOpenFile = fopen(LightStatus::$SaveFile, "w") or die("Unable to open save file!");
+      fwrite($myOpenFile, json_encode($config));
       fclose($myOpenFile);
     }
   }
