@@ -17,7 +17,7 @@ if (!empty($_POST["pwd"]) && $_POST["pwd"] == $currentStoredConfig)
   }
   else if (!empty($_POST["GetCurrentTime"]))
   {
-    echo json_encode(LightStatus::loadFromTextFile());
+    echo LightStatus::loadFromTextFile();
     log::currentStatusRequestMade();
   }
   else if (!empty($_POST["GetLogs"]))
