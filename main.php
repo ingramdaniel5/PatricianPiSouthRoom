@@ -10,6 +10,11 @@ if (!empty($_POST["pwd"]) && $_POST["pwd"] == $currentStoredConfig)
     LightStatus::update($_POST["UpdateTime"]);
     log::savedTimeUpdated();
   }
+  else if (!empty($_POST["HelloIsAnyoneHome"]))
+  {
+    echo "SouthRoomPi";
+    log::currentStatusRequestMade();
+  }
   else if (!empty($_POST["GetCurrentTime"]))
   {
     echo json_encode(LightStatus::loadFromTextFile());

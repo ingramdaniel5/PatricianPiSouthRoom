@@ -1,1 +1,1 @@
-{"TimeOn":"12:00","TimeOff":"12:00"}
+{"TimeOn":null,"TimeOff":null}
